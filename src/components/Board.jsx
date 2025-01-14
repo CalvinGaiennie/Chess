@@ -1,28 +1,27 @@
 import styles from "./Board.module.css";
 import { useState, useEffect, useRef } from "react";
 
+const numbers = [1, 2, 3, 4, 5, 6, 7, 8];
+const letters = ["", "A", "B", "C", "D", "E", "F", "G", "H"];
+const lettersLC = ["a", "b", "c", "d", "e", "f", "g", "h"];
+const lettersCAPS = ["A", "B", "C", "D", "E", "F", "G", "H"];
+const board = [
+  ["BR", "BB", "BKN", "BQ", "BK", "BKN", "BB", "BR"],
+  ["BP", "BP", "BP", "BP", "BP", "BP", "BP", "BP"],
+  ["", "", "", "", "", "", "", ""],
+  ["", "", "", "", "", "", "", ""],
+  ["", "", "", "", "", "", "", ""],
+  ["", "", "", "", "", "", "", ""],
+  ["WP", "WP", "WP", "WP", "WP", "WP", "WP", "WP"],
+  ["WR", "WB", "WKN", "WQ", "WK", "WKN", "WB", "WR"],
+];
+
 function Board() {
-  const [boardElement, setBoardElement] = useState(null);
+  const [boardElement, setBoardElement] = useState(buildBoard(board));
+  const [selectedSquare, setSelectedSquare] = useState(null);
   const inputRef = useRef(null);
-  useEffect(() => {
-    setBoardElement(buildBoard(board));
-  }, []);
 
-  const numbers = [1, 2, 3, 4, 5, 6, 7, 8];
-  const letters = ["", "A", "B", "C", "D", "E", "F", "G", "H"];
-  const lettersLC = ["a", "b", "c", "d", "e", "f", "g", "h"];
-  const lettersCAPS = ["A", "B", "C", "D", "E", "F", "G", "H"];
-  const board = [
-    ["BR", "BB", "BKN", "BQ", "BK", "BKN", "BB", "BR"],
-    ["BP", "BP", "BP", "BP", "BP", "BP", "BP", "BP"],
-    ["", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", ""],
-    ["WP", "WP", "WP", "WP", "WP", "WP", "WP", "WP"],
-    ["WR", "WB", "WKN", "WQ", "WK", "WKN", "WB", "WR"],
-  ];
-
+  useEffect(() => {}, [selectedSquare]);
   function buildBoard(board) {
     return board.map((row, i) => (
       <div key={i} className={styles.flex}>
@@ -46,57 +45,88 @@ function Board() {
   }
 
   function checkMove(initialRow, initialColumn, finalRow, finalColumn) {
-    const peice = board[initialRow][initialColumn];
-    switch (peice) {
-      case "WP":
-        if (finalRow === initialRow - 1) {
+    const piece = board[initialRow][initialColumn];
+    const pieceColor = piece[0];
+    console.log("pieceColor", pieceColor, typeof pieceColor);
+    const occupied = checkIfOccupied(finalRow, finalColumn);
+    console.log("occupied by ", occupied);
+    if (occupied == "W" && pieceColor == "W") {
+      return false;
+    } else if (occupied == "B" && pieceColor == "B") {
+      return false;
+    } else {
+      switch (piece) {
+        case "WP":
+          if (finalRow === initialRow - 1) {
+            return true;
+          } else if (finalRow === initialRow - 2 && initialRow === 6) {
+            return true;
+          }
+          return false;
+        case "WR":
           return true;
-        } else if (finalRow === initialRow - 2 && initialRow === 6) {
+        case "WB":
           return true;
-        }
-        return false;
-      case "WR":
-        return true;
-      case "WB":
-        return true;
-      case "WKN":
-        return true;
-      case "WQ":
-        return true;
-      case "WK":
-        if (
-          (initialRow == finalRow - 1 ||
-            initialRow == finalRow + 1 ||
-            initialRow == finalRow) &&
-          (initialColumn == finalColumn - 1 ||
-            initialColumn == finalColumn + 1 ||
-            initialColumn == finalColumn)
-        ) {
+        case "WKN":
           return true;
-        }
-        return false;
-      case "BP":
-        if (finalRow === initialRow + 1) {
+        case "WQ":
           return true;
-        } else if (finalRow === initialRow + 2 && initialRow === 1) {
+        case "WK":
+          if (
+            (initialRow == finalRow - 1 ||
+              initialRow == finalRow + 1 ||
+              initialRow == finalRow) &&
+            (initialColumn == finalColumn - 1 ||
+              initialColumn == finalColumn + 1 ||
+              initialColumn == finalColumn)
+          ) {
+            return true;
+          }
+          return false;
+        case "BP":
+          if (finalRow === initialRow + 1) {
+            return true;
+          } else if (finalRow === initialRow + 2 && initialRow === 1) {
+            return true;
+          }
+          return false;
+        case "BR":
           return true;
-        }
-        return false;
-      case "BR":
-        return true;
-      case "BB":
-        return true;
-      case "BKN":
-        return true;
-      case "BQ":
-        return true;
-      case "BK":
-        return true;
-      default:
-        return false;
+        case "BB":
+          return true;
+        case "BKN":
+          return true;
+        case "BQ":
+          return true;
+        case "BK":
+          if (
+            (initialRow == finalRow - 1 ||
+              initialRow == finalRow + 1 ||
+              initialRow == finalRow) &&
+            (initialColumn == finalColumn - 1 ||
+              initialColumn == finalColumn + 1 ||
+              initialColumn == finalColumn)
+          ) {
+            return true;
+          }
+          return false;
+        default:
+          return false;
+      }
     }
   }
 
+  function checkIfOccupied(row, col) {
+    const piece = board[row][col];
+    const color = piece[0];
+    if (color == "W") {
+      return "W";
+    } else if (color == "B") {
+      return "B";
+    } else {
+      return false;
+    }
+  }
   function changeInputFromLetterToNumber(inputsArray) {
     if (lettersLC.includes(inputsArray[1])) {
       const inputLetter = inputsArray[1];
