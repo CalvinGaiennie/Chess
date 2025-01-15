@@ -20,6 +20,10 @@
   background-color: antiquewhite;
 }
 
+.selected {
+  background-color: rgb(196, 157, 108);
+}
+
 /* .squareDiv {
   box-sizing: border-box;
   display: flex;

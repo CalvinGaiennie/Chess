@@ -1,3 +1,5 @@
+//
+
 import styles from "./Board.module.css";
 import { useState, useEffect, useRef } from "react";
 
@@ -17,16 +19,42 @@ const board = [
 ];
 
 function Board() {
-  const [boardElement, setBoardElement] = useState(buildBoard(board));
   const [selectedSquare, setSelectedSquare] = useState(null);
+  const [boardElement, setBoardElement] = useState(buildBoard(board));
+
   const inputRef = useRef(null);
 
-  useEffect(() => {}, [selectedSquare]);
+  useEffect(() => {
+    setBoardElement(buildBoard(board));
+  }, [selectedSquare]);
+
+  function selectSquare(row, col) {
+    if (selectedSquare) {
+      setSelectedSquare(null);
+    } else {
+      setSelectedSquare([row, col]);
+    }
+  }
+
+  function clickMove() {}
+
   function buildBoard(board) {
     return board.map((row, i) => (
       <div key={i} className={styles.flex}>
         {row.map((square, j) => (
-          <div key={j} className={`${styles.square} ${decideBackground(i, j)}`}>
+          <div
+            key={j}
+            className={`${styles.square} ${decideBackground(i, j)} ${
+              selectedSquare &&
+              selectedSquare[0] === i &&
+              selectedSquare[1] === j
+                ? styles.selected
+                : ""
+            }`}
+            onClick={() => {
+              selectSquare(i, j);
+            }}
+          >
             {square}
           </div>
         ))}
@@ -64,7 +92,10 @@ function Board() {
           }
           return false;
         case "WR":
-          return true;
+          if (initialRow == finalRow || initialColumn == finalColumn) {
+            return true;
+          }
+          return false;
         case "WB":
           return true;
         case "WKN":
@@ -91,7 +122,10 @@ function Board() {
           }
           return false;
         case "BR":
-          return true;
+          if (initialRow == finalRow || initialColumn == finalColumn) {
+            return true;
+          }
+          return false;
         case "BB":
           return true;
         case "BKN":
