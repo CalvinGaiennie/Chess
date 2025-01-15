@@ -30,13 +30,17 @@ function Board() {
 
   function selectSquare(row, col) {
     if (selectedSquare) {
+      const initRow = selectedSquare[0];
+      const initCol = selectedSquare[1];
+      console.log(
+        `initRow ${initRow} initCol ${initCol} row ${row} col ${col}`
+      );
+      movePiece(initRow, initCol, row, col);
       setSelectedSquare(null);
     } else {
       setSelectedSquare([row, col]);
     }
   }
-
-  function clickMove() {}
 
   function buildBoard(board) {
     return board.map((row, i) => (
@@ -181,7 +185,19 @@ function Board() {
   }
 
   // initialRow, initialCol, finalRow, finalColumn
-  function movePiece() {
+  function movePiece(initialRow, initialCol, finalRow, finalColumn) {
+    if (checkMove(initialRow, initialCol, finalRow, finalColumn)) {
+      const newBoard = [...board];
+      const peice = board[initialRow][initialCol];
+      newBoard[initialRow][initialCol] = "";
+      newBoard[finalRow][finalColumn] = peice;
+      setBoardElement(buildBoard(newBoard));
+    } else {
+      alert("Invalid move");
+    }
+  }
+
+  function movePieceFromRef() {
     const inputs = inputRef.current.value;
     const inputsArray = inputs.split(",");
     const currIR = inputsArray[0];
@@ -199,28 +215,19 @@ function Board() {
     }
 
     const inputsAsNums = inputsArray.map((input) => Number(input));
-    const [initialRow, initialCol, finalRow, finalColumn] = inputsAsNums;
+    const [initialRow, initialColumn, finalRow, finalColumn] = inputsAsNums;
     console.log(
       "initialRow",
       initialRow,
       "initialC",
-      initialCol,
+      initialColumn,
       "finalRow",
       finalRow,
       "finalCol",
       finalColumn
     );
-    if (checkMove(initialRow, initialCol, finalRow, finalColumn)) {
-      const newBoard = [...board];
-      const peice = board[initialRow][initialCol];
-      newBoard[initialRow][initialCol] = "";
-      newBoard[finalRow][finalColumn] = peice;
-      setBoardElement(buildBoard(newBoard));
-    } else {
-      alert("Invalid move");
-    }
+    movePiece(initialRow, initialColumn, finalRow, finalColumn);
   }
-
   return (
     <div>
       <h1>Chess</h1>
@@ -245,7 +252,7 @@ function Board() {
       </div>
       <div className="moveTest">
         <input type="text" placeholder="IR, IC, FR, FC" ref={inputRef} />
-        <button onClick={() => movePiece()}>Move</button>
+        <button onClick={() => movePieceFromRef()}>Move</button>
       </div>
     </div>
   );
