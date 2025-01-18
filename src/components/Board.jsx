@@ -1,5 +1,4 @@
-//
-
+// test move piece
 import styles from "./Board.module.css";
 import { useState, useEffect, useRef } from "react";
 
@@ -89,7 +88,11 @@ function Board() {
     } else {
       switch (piece) {
         case "WP":
-          if (finalRow === initialRow - 1) {
+          //makes the pawn unable to capture forward
+          if (occupied && initialColumn === finalColumn) {
+            return false;
+          }
+          if (finalRow === initialRow - 1 && initialColumn === finalColumn) {
             return true;
           } else if (finalRow === initialRow - 2 && initialRow === 6) {
             return true;
@@ -119,7 +122,11 @@ function Board() {
           }
           return false;
         case "BP":
-          if (finalRow === initialRow + 1) {
+          //makes the pawn unable to capture forward
+          if (occupied && initialColumn === finalColumn) {
+            return false;
+          }
+          if (finalRow === initialRow + 1 && initialColumn === finalColumn) {
             return true;
           } else if (finalRow === initialRow + 2 && initialRow === 1) {
             return true;
