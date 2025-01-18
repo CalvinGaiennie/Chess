@@ -92,12 +92,27 @@ function Board() {
           if (occupied && initialColumn === finalColumn) {
             return false;
           }
+          // Allows a pawn to move 1 forward
           if (finalRow === initialRow - 1 && initialColumn === finalColumn) {
             return true;
-          } else if (finalRow === initialRow - 2 && initialRow === 6) {
+            //Allows a pawn to move 2 forward on first move
+          } else if (
+            finalRow === initialRow - 2 &&
+            initialRow === 6 &&
+            initialColumn === finalColumn
+          ) {
+            return true;
+            //Allows a pawn to capture diagonally and one forward
+          } else if (
+            occupied &&
+            (initialColumn === finalColumn + 1 ||
+              initialColumn === finalColumn - 1) &&
+            finalRow === initialRow - 1
+          ) {
             return true;
           }
           return false;
+
         case "WR":
           if (initialRow == finalRow || initialColumn == finalColumn) {
             return true;
