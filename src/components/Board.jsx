@@ -191,6 +191,18 @@ function Board() {
     //return
   }
   function checkPathRow(initialRow, initialColumn, finalRow, finalColumn) {
+    let pathLength;
+
+    if (finalColumn > initialColumn) {
+      pathLength = finalColumn - initialColumn;
+    } else {
+      pathLength = initialColumn - finalColumn;
+    }
+
+    for (i = 0; i > pathLength; i++) {
+      board[initialRow][i] = 0;
+    }
+
     // map through the row between the init and final and check each for occupation then return a true false
     // either use different functions depending on the direction of travel or have a variable in the function that switched the direction
   }
