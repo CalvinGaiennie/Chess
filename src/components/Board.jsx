@@ -81,10 +81,14 @@ function Board() {
     console.log("pieceColor", pieceColor, typeof pieceColor);
     const occupied = checkIfOccupied(finalRow, finalColumn);
     console.log("occupied by ", occupied);
+
+    //If the peice is trying to move onto its own color then dont allow it
     if (occupied == "W" && pieceColor == "W") {
       return false;
     } else if (occupied == "B" && pieceColor == "B") {
       return false;
+
+      //piece specific rules
     } else {
       switch (piece) {
         case "WP":
