@@ -114,7 +114,10 @@ function Board() {
           return false;
 
         case "WR":
-          if (initialRow == finalRow || initialColumn == finalColumn) {
+          if (
+            (initialRow == finalRow || initialColumn == finalColumn) &&
+            occupied != "W"
+          ) {
             return true;
           }
           return false;
@@ -174,6 +177,21 @@ function Board() {
           return false;
       }
     }
+  }
+  //Major to do is to figure out how to not let pieces jump over other peices.
+  function checkPathDiagonal(initialRow, initialColumn, finalRow, finalColumn) {
+    // write a function to calculate diagonals and get a diagonal of the board into an array then map for occupation and return a true false
+    //use if statements to figure out if the diagonal is going up the board or down in both directions and use this to decide on which function to use
+    //create init array
+    // map over
+    //return
+  }
+  function checkPathRow(initialRow, initialColumn, finalRow, finalColumn) {
+    // map through the row between the init and final and check each for occupation then return a true false
+    // either use different functions depending on the direction of travel or have a variable in the function that switched the direction
+  }
+  function checkPathColumn(initialRow, initialColumn, finalRow, finalColumn) {
+    //make an array to represent the column then map through it between the init and final, check for occupation and return a true false
   }
 
   function checkIfOccupied(row, col) {
